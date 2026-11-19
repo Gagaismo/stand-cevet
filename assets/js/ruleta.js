@@ -85,9 +85,10 @@
   var RENGLONES = {
     "Internet y redes": ["Internet", "y redes"],
     "Celulares y apps": ["Celulares", "y apps"],
-    Videojuegos: ["Video-", "juegos"],
-    Ciberseguridad: ["Ciber-", "seguridad"]
   };
+  /* Largo máximo de un renglón a lo largo del radio (unidades del SVG): si una
+     palabra larga no entra, se achica la letra en vez de cortarla con guion. */
+  var LARGO_MAX = 132;
   var COLORES = ["amarillo", "tinta", "blanco", "gris"];
   var TEXTO_SOBRE = { amarillo: "sobre-claro", tinta: "sobre-tinta", blanco: "sobre-claro", gris: "sobre-claro" };
 
@@ -132,7 +133,9 @@
         var texto = document.createElementNS(SVG, "text");
         texto.setAttribute("x", pt[0]);
         texto.setAttribute("y", pt[1]);
-        texto.setAttribute("transform", "rotate(" + (medio - 90) + " " + pt[0] + " " + pt[1] + ")");
+        /* En la mitad izquierda se gira 180° más para que no quede al revés. */
+        var giroTexto = medio > 180 ? medio + 90 : medio - 90;
+        texto.setAttribute("transform", "rotate(" + giroTexto + " " + pt[0] + " " + pt[1] + ")");
         texto.setAttribute("class", "sector-texto " + TEXTO_SOBRE[color]);
         texto.setAttribute("text-anchor", "middle");
         texto.setAttribute("dominant-baseline", "central");
@@ -155,6 +158,22 @@
       centro.setAttribute("class", "rueda-centro");
       svg.appendChild(g);
       svg.appendChild(centro);
+      ajustarRotulos(svg);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ajustarRotulos(svg); });
+    }
+
+    function ajustarRotulos(svg) {
+      Array.prototype.forEach.call(svg.querySelectorAll(".sector-texto"), function (t) {
+        t.style.fontSize = "";
+        var largo = 0;
+        Array.prototype.forEach.call(t.querySelectorAll("tspan"), function (r) {
+          largo = Math.max(largo, r.getComputedTextLength());
+        });
+        if (largo > LARGO_MAX) {
+          var base = parseFloat(getComputedStyle(t).fontSize) || 17;
+          t.style.fontSize = (base * LARGO_MAX / largo).toFixed(2) + "px";
+        }
+      });
     }
 
     var giro = document.getElementById("rueda-giro");
