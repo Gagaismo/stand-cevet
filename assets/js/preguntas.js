@@ -1,222 +1,333 @@
 /* Banco de preguntas de la ruleta. Script clásico: expone window.PREGUNTAS
    y se puede usar con require() desde Node para los tests.
+   Preguntas fáciles, para cualquiera que pase por el stand: 3 opciones cada
+   una, una sola correcta (la ruleta mezcla el orden al mostrarlas).
    Las preguntas de "Viaje" usan solo datos confirmados (La Gaceta 26/03/2026
    y el Instagram @cevet_2027). No incluir fechas del viaje 2027 ni la ciudad
    de IBM Quantum en España: no están confirmadas. */
 (function (raiz) {
   "use strict";
 
-  var TEMAS = ["IA", "Cuántica", "Viaje", "Sistemas"];
+  var TEMAS = ["IA", "Cuántica", "Viaje", "Sistemas", "Internet y redes", "Celulares y apps", "Videojuegos", "Ciberseguridad"];
+
+  function q(pregunta, opciones, correcta, explicacion) {
+    return { pregunta: pregunta, opciones: opciones, correcta: correcta, explicacion: explicacion };
+  }
 
   var BANCO = {
     IA: [
-      {
-        pregunta: "¿Qué significa la sigla «IA»?",
-        opciones: ["Internet Avanzada", "Inteligencia Artificial", "Informática Aplicada", "Interfaz Automática"],
-        correcta: 1,
-        explicacion: "IA es Inteligencia Artificial: programas que aprenden de datos para hacer tareas como reconocer imágenes, traducir o conversar."
-      },
-      {
-        pregunta: "¿Cómo aprende un modelo de inteligencia artificial?",
-        opciones: ["Viendo muchísimos ejemplos (datos)", "Leyendo un solo libro de reglas", "Conectándose a una red eléctrica especial", "No aprende: todo lo escribe un programador a mano"],
-        correcta: 0,
-        explicacion: "Se entrena con muchos ejemplos y va ajustando sus números internos hasta acertar cada vez más. Por eso los datos son tan importantes."
-      },
-      {
-        pregunta: "Cuando le escribís algo a ChatGPT para que te responda, eso que escribís se llama…",
-        opciones: ["Un pixel", "Un prompt", "Un firewall", "Un router"],
-        correcta: 1,
-        explicacion: "El prompt es la instrucción o pregunta que le das a la IA. Cuanto más claro el prompt, mejor suele ser la respuesta."
-      },
-      {
-        pregunta: "¿Qué es una «alucinación» de una IA?",
-        opciones: ["Cuando se apaga sola", "Cuando genera imágenes de colores", "Cuando inventa un dato falso pero lo dice con total seguridad", "Cuando se queda sin batería"],
-        correcta: 2,
-        explicacion: "Los modelos de lenguaje a veces inventan datos que suenan creíbles. Por eso siempre conviene chequear lo que dice una IA."
-      },
-      {
-        pregunta: "¿Qué tipo de chip se usa muchísimo para entrenar inteligencia artificial?",
-        opciones: ["La GPU (placa de video)", "El chip de una tarjeta SIM", "El de un control remoto", "El de una calculadora"],
-        correcta: 0,
-        explicacion: "Las GPU nacieron para videojuegos, pero hacen miles de cuentas en paralelo, justo lo que necesita entrenar una IA."
-      },
-      {
-        pregunta: "¿Quién propuso en 1950 una prueba para saber si una máquina puede «pensar»?",
-        opciones: ["Albert Einstein", "Alan Turing", "Steve Jobs", "Isaac Newton"],
-        correcta: 1,
-        explicacion: "Alan Turing propuso el famoso «test de Turing»: si no podés distinguir a la máquina de una persona conversando, la máquina lo pasa."
-      },
-      {
-        pregunta: "¿Cuál de estas cosas usa inteligencia artificial?",
-        opciones: ["Una lamparita común", "Un reloj de agujas", "Las recomendaciones de videos y series de tu celular", "Una regla de 30 cm"],
-        correcta: 2,
-        explicacion: "Las plataformas aprenden de lo que mirás para recomendarte lo próximo. Es IA que usás todos los días sin darte cuenta."
-      },
-      {
-        pregunta: "En 1997 una computadora de IBM llamada Deep Blue le ganó al campeón mundial de…",
-        opciones: ["Truco", "Ajedrez", "Fútbol", "Póker"],
-        correcta: 1,
-        explicacion: "Deep Blue le ganó un match de ajedrez a Garry Kasparov en 1997. Fue un hito: por primera vez una máquina vencía al campeón del mundo en un match."
-      }
+      q("¿Qué significa la sigla «IA»?",
+        ["Internet Avanzada", "Inteligencia Artificial", "Imagen Animada"], 1,
+        "IA es Inteligencia Artificial: programas que aprenden de datos para reconocer imágenes, traducir o conversar."),
+      q("¿Cómo aprende una inteligencia artificial?",
+        ["Viendo muchísimos ejemplos (datos)", "Durmiendo ocho horas", "Comiendo electricidad"], 0,
+        "Se entrena con muchos ejemplos y va ajustándose hasta acertar cada vez más. Por eso los datos son tan importantes."),
+      q("¿Cuál de estos es un asistente de inteligencia artificial para chatear?",
+        ["ChatGPT", "Excel", "Paint"], 0,
+        "ChatGPT es un chatbot de IA: le escribís y te responde con texto. Excel es una planilla y Paint un programa de dibujo."),
+      q("Lo que le escribís a una IA para pedirle algo se llama…",
+        ["Prompt", "Pixel", "Pendrive"], 0,
+        "El prompt es la instrucción o pregunta que le das a la IA. Cuanto más claro el prompt, mejor la respuesta."),
+      q("Si una IA te dice un dato muy seguro de sí misma, ¿qué conviene hacer?",
+        ["Creerle siempre", "Chequearlo, porque a veces inventa", "Apagar la compu"], 1,
+        "Las IA a veces «alucinan»: inventan datos que suenan creíbles. Siempre conviene chequear en una fuente confiable."),
+      q("¿Cuál de estas cosas usa inteligencia artificial?",
+        ["Las recomendaciones de videos de tu celular", "Una lamparita", "Una regla de 30 cm"], 0,
+        "Las plataformas aprenden de lo que mirás para recomendarte lo próximo. Es IA que usás todos los días."),
+      q("Cuando el celular reconoce tu cara para desbloquearse, usa…",
+        ["Inteligencia artificial", "Magia", "Un imán"], 0,
+        "El reconocimiento facial usa IA entrenada para distinguir rasgos de una cara y saber si sos vos."),
+      q("¿Una IA puede crear una imagen a partir de un texto?",
+        ["Sí", "No, nunca", "Solo en blanco y negro"], 0,
+        "Hay IA generativas que dibujan imágenes nuevas a partir de una descripción escrita."),
+      q("En 1997 la computadora Deep Blue de IBM le ganó al campeón mundial de…",
+        ["Ajedrez", "Fútbol", "Truco"], 0,
+        "Deep Blue le ganó un match de ajedrez a Garry Kasparov en 1997: la primera vez que una máquina venció al campeón del mundo en un match."),
+      q("¿Qué es un «robot»?",
+        ["Una máquina que puede hacer tareas sola", "Un tipo de virus", "Una red wifi"], 0,
+        "Un robot es una máquina programada para hacer tareas por su cuenta; muchos hoy usan IA para ver y moverse."),
+      q("¿Cuál de estos asistentes de voz te responde si le hablás?",
+        ["Alexa", "Bluetooth", "USB"], 0,
+        "Alexa (como Siri o el Asistente de Google) entiende lo que decís y te responde. Bluetooth y USB son conexiones."),
+      q("El traductor automático de tu celular funciona gracias a…",
+        ["Inteligencia artificial", "Un diccionario de papel", "Una persona escondida"], 0,
+        "Los traductores modernos usan IA entrenada con millones de textos en distintos idiomas.")
     ],
 
     "Cuántica": [
-      {
-        pregunta: "Una computadora común usa bits. ¿Qué usa una computadora cuántica?",
-        opciones: ["Bytes gigantes", "Qubits", "Megapíxeles", "Válvulas de vapor"],
-        correcta: 1,
-        explicacion: "El qubit es el bit cuántico: además de 0 o 1, puede estar en una combinación de los dos hasta que lo medimos."
-      },
-      {
-        pregunta: "¿Qué es la «superposición»?",
-        opciones: ["Poner una computadora encima de otra", "Que un qubit esté en una combinación de 0 y 1 a la vez hasta que se mide", "Un virus informático", "Un tipo de pantalla"],
-        correcta: 1,
-        explicacion: "En superposición el qubit no tiene un valor definido: al medirlo «elige» 0 o 1 con cierta probabilidad. Probalo en la moneda cuántica."
-      },
-      {
-        pregunta: "¿Qué pasa cuando medís un qubit que está en superposición?",
-        opciones: ["Se rompe", "Da 0 o 1, y queda en ese valor", "Da siempre 2", "Explota la computadora"],
-        correcta: 1,
-        explicacion: "Medir obliga al qubit a definirse: da 0 o 1 y la superposición se pierde. Eso se llama «colapso»."
-      },
-      {
-        pregunta: "Los chips cuánticos de IBM funcionan a una temperatura cercana a…",
-        opciones: ["La de una heladera (4 °C)", "La del Sol", "El cero absoluto (−273 °C)", "La temperatura ambiente"],
-        correcta: 2,
-        explicacion: "Se enfrían a unas milésimas de grado sobre el cero absoluto, más frío que el espacio, para que el ruido no arruine los qubits."
-      },
-      {
-        pregunta: "El «candelabro» dorado que aparece en las fotos de computadoras cuánticas es…",
-        opciones: ["Un adorno de diseño", "La parte que enfría y conecta el chip cuántico", "Una antena de wifi", "Un ventilador gigante"],
-        correcta: 1,
-        explicacion: "Es la estructura del refrigerador: cada piso está más frío que el anterior, y abajo de todo va el chip con los qubits."
-      },
-      {
-        pregunta: "Cuando dos qubits están «entrelazados»…",
-        opciones: ["Están pegados con cinta", "Sus resultados quedan conectados: medir uno te dice algo del otro", "Comparten la misma batería", "Se apagan juntos"],
-        correcta: 1,
-        explicacion: "El entrelazamiento hace que los resultados de dos qubits estén correlacionados aunque estén separados. Es clave para la computación cuántica."
-      },
-      {
-        pregunta: "¿Una computadora cuántica va a reemplazar a tu notebook?",
-        opciones: ["Sí, el año que viene", "No: sirve para problemas específicos, como simular moléculas", "Sí, pero solo para jugar", "No, porque no existen"],
-        correcta: 1,
-        explicacion: "No reemplaza a las computadoras comunes: se usa para ciertos problemas muy difíciles, como simular moléculas o materiales nuevos."
-      },
-      {
-        pregunta: "¿Qué hace la compuerta Hadamard (H) con un qubit en |0⟩?",
-        opciones: ["Lo apaga", "Lo pone en superposición: 50% de chances de medir 0 y 50% de medir 1", "Lo convierte en un byte", "Lo duplica"],
-        correcta: 1,
-        explicacion: "H es como tirar una moneda cuántica: después de aplicarla, medir da 0 o 1 mitad y mitad. ¡Y si la aplicás dos veces, vuelve a |0⟩!"
-      }
+      q("Una computadora común usa bits. ¿Qué usa una computadora cuántica?",
+        ["Qubits", "Pilas AA", "Disquetes"], 0,
+        "El qubit es el bit cuántico: además de 0 o 1, puede estar en una mezcla de los dos hasta que lo medimos."),
+      q("Un bit común puede valer…",
+        ["0 o 1", "Cualquier número", "Solo 7"], 0,
+        "Un bit es 0 o 1, como una moneda apoyada en la mesa: cara o ceca."),
+      q("Un qubit se parece más a una moneda…",
+        ["Girando en el aire", "Pegada a la mesa", "Rota"], 0,
+        "Mientras gira, la moneda no es ni cara ni ceca: así es la superposición. Al medir, «cae» en 0 o en 1."),
+      q("¿Qué pasa cuando medís un qubit en superposición?",
+        ["Da 0 o 1 y se queda así", "Da 2", "Explota"], 0,
+        "Medir obliga al qubit a definirse: da 0 o 1 y la superposición se pierde."),
+      q("¿Qué empresa construye la computadora cuántica que CEVET vio en el viaje 2026?",
+        ["IBM", "Coca-Cola", "Adidas"], 0,
+        "En el viaje 2026, CEVET vio de cerca una computadora cuántica de IBM."),
+      q("Los chips cuánticos de IBM funcionan…",
+        ["Casi al cero absoluto (−273 °C)", "A temperatura ambiente", "Muy calientes, como un horno"], 0,
+        "Se enfrían a milésimas de grado sobre el cero absoluto, más frío que el espacio, para que el ruido no arruine los qubits."),
+      q("El «candelabro» dorado de las fotos de computadoras cuánticas sirve para…",
+        ["Enfriar y conectar el chip", "Decorar", "Tener wifi"], 0,
+        "Es la estructura del refrigerador: cada piso está más frío que el anterior, y abajo de todo va el chip con los qubits."),
+      q("¿Una computadora cuántica va a reemplazar a tu notebook?",
+        ["No: sirve para problemas especiales", "Sí, el año que viene", "Sí, para jugar"], 0,
+        "No reemplaza a las computadoras comunes: se usa para problemas muy difíciles, como simular moléculas o materiales."),
+      q("¿Para qué puede servir una computadora cuántica?",
+        ["Simular moléculas para crear medicamentos", "Calentar la comida", "Cargar el celular"], 0,
+        "Las moléculas siguen leyes cuánticas, así que una computadora cuántica es ideal para simularlas."),
+      q("Si en la moneda cuántica aplicás H y medís 100 veces, ¿qué sale?",
+        ["Más o menos mitad 0 y mitad 1", "Siempre 0", "Siempre 1"], 0,
+        "La compuerta H pone al qubit en superposición 50/50. Probalo en la moneda cuántica del stand."),
+      q("Si medís un qubit en |0⟩ sin aplicarle nada, ¿qué da?",
+        ["Siempre 0", "Siempre 1", "Un error"], 0,
+        "Sin compuertas, el qubit está definido en 0: medirlo da 0 todas las veces."),
+      q("¿Se puede probar una computadora cuántica de IBM por internet?",
+        ["Sí, IBM ofrece acceso en la nube", "No, es secreta", "Solo si vivís en la Luna"], 0,
+        "IBM Quantum permite correr programas en computadoras cuánticas reales desde internet, incluso con planes gratuitos.")
     ],
 
     Viaje: [
-      {
-        pregunta: "¿A qué feria tecnológica viajaron estudiantes de Sistemas de la UTN FRT en mayo de 2026?",
-        opciones: ["Tech Show Frankfurt", "CES de Las Vegas", "Mobile World Congress", "Campus Party"],
-        correcta: 0,
-        explicacion: "Según La Gaceta, el 6 y 7 de mayo de 2026 viajaron a Alemania para participar del Tech Show Frankfurt."
-      },
-      {
-        pregunta: "Frankfurt, donde fue el viaje de 2026, queda en…",
-        opciones: ["Francia", "Alemania", "Inglaterra", "Italia"],
-        correcta: 1,
-        explicacion: "Frankfurt está en Alemania. Allí se hizo el Tech Show Frankfurt, uno de los eventos tecnológicos más importantes del continente."
-      },
-      {
-        pregunta: "Según La Gaceta, ¿cuántos estudiantes de Sistemas lograron juntar la plata para ir a Frankfurt?",
-        opciones: ["3", "8", "25", "50"],
-        correcta: 1,
-        explicacion: "Eran 25 los que organizaron rifas, eventos y colectas; ocho estudiantes lograron reunir el dinero (La Gaceta, 26/03/2026)."
-      },
-      {
-        pregunta: "El viaje a Frankfurt fue parte de un proyecto académico de la cátedra de…",
-        opciones: ["Comunicación de Datos", "Análisis Matemático", "Química", "Física II"],
-        correcta: 0,
-        explicacion: "Fue un proyecto de la cátedra de Comunicación de Datos, con bitácora de actividades y un trabajo final sobre una tendencia tecnológica."
-      },
-      {
-        pregunta: "¿Cuál de estas áreas del Tech Show Frankfurt recorrieron?",
-        opciones: ["Data Centre World", "Salón del Automóvil", "Feria del Libro", "Semana de la Moda"],
-        correcta: 0,
-        explicacion: "Recorrieron Big Data & AI World, Cloud & AI Infrastructure y Data Centre World."
-      },
-      {
-        pregunta: "¿Cuál es la próxima meta de CEVET?",
-        opciones: ["Tech Show London 2027", "Un viaje a la Luna", "El Mundial 2030", "Tech Show Tokio 2026"],
-        correcta: 0,
-        explicacion: "CEVET va rumbo al Tech Show London 2027, en Londres. Para eso organiza eventos, rifas y actividades."
-      },
-      {
-        pregunta: "Además de Londres, ¿qué quiere visitar CEVET en España?",
-        opciones: ["Un estadio de fútbol", "IBM Quantum, para conocer la computación cuántica", "Una fábrica de autos", "Un museo de dinosaurios"],
-        correcta: 1,
-        explicacion: "El objetivo es visitar IBM Quantum en España para conocer más sobre la computación cuántica y sus avances."
-      },
-      {
-        pregunta: "¿Qué significa CEVET?",
-        opciones: ["Centro de Viajes Tecnológicos", "Centro de Veterinaria", "Centro de Estudiantes de Tucumán", "Comité de Eventos y Torneos"],
-        correcta: 0,
-        explicacion: "CEVET es el Centro de Viajes Tecnológicos de la UTN FRT: estudiantes y docentes de Ingeniería en Sistemas de Información."
-      },
-      {
-        pregunta: "¿Dónde podés seguir el viaje de CEVET?",
-        opciones: ["@cevet_2027 en Instagram", "En la radio AM", "En el diario de 1990", "En ningún lado"],
-        correcta: 0,
-        explicacion: "Seguí a @cevet_2027 en Instagram para enterarte de los eventos, la rifa y la Gran Peña."
-      }
+      q("¿A qué país viajó el grupo de la UTN FRT en 2026?",
+        ["Alemania", "Brasil", "Japón"], 0,
+        "En mayo de 2026 viajaron a Alemania para participar del Tech Show Frankfurt."),
+      q("¿A qué ciudad fueron en 2026?",
+        ["Frankfurt", "París", "Roma"], 0,
+        "Fueron a Frankfurt, en Alemania, al Tech Show Frankfurt."),
+      q("¿Cómo se llama la feria tecnológica que visitaron en 2026?",
+        ["Tech Show Frankfurt", "Feria del Libro", "Expo Rural"], 0,
+        "El Tech Show Frankfurt reúne áreas como Big Data & AI World, Cloud & AI Infrastructure y Data Centre World."),
+      q("¿En qué mes de 2026 fue el viaje a Frankfurt?",
+        ["Mayo", "Enero", "Diciembre"], 0,
+        "Según La Gaceta, el 6 y 7 de mayo de 2026 viajaron a Alemania para participar del Tech Show Frankfurt."),
+      q("¿Qué significa CEVET?",
+        ["Centro de Viajes Tecnológicos", "Centro de Veterinaria", "Club de Vóley"], 0,
+        "CEVET es el Centro de Viajes Tecnológicos de la UTN FRT: estudiantes y docentes de Ingeniería en Sistemas."),
+      q("¿De qué universidad es CEVET?",
+        ["UTN Facultad Regional Tucumán", "Universidad de Harvard", "Universidad de Oxford"], 0,
+        "CEVET es de la UTN FRT, la Facultad Regional Tucumán de la Universidad Tecnológica Nacional."),
+      q("¿Qué carrera estudian los chicos de CEVET?",
+        ["Ingeniería en Sistemas", "Medicina", "Abogacía"], 0,
+        "Son estudiantes de Ingeniería en Sistemas de Información de la UTN FRT."),
+      q("¿Cuál es la próxima meta de CEVET?",
+        ["Tech Show London 2027", "Un viaje a la Luna", "El Mundial de fútbol"], 0,
+        "CEVET va rumbo al Tech Show London 2027 y a visitar IBM Quantum en España."),
+      q("Londres, la próxima meta, queda en…",
+        ["Inglaterra", "Italia", "Australia"], 0,
+        "Londres es la capital de Inglaterra y del Reino Unido. Allí se hace el Tech Show London."),
+      q("¿Qué quiere visitar CEVET en España?",
+        ["IBM Quantum, para ver computación cuántica", "Un estadio de fútbol", "Una fábrica de chocolate"], 0,
+        "El objetivo es visitar IBM Quantum en España para conocer la computación cuántica de primera mano."),
+      q("¿Dónde podés seguir el viaje de CEVET?",
+        ["En Instagram, @cevet_2027", "En la radio AM", "En ningún lado"], 0,
+        "Seguí a @cevet_2027 en Instagram para enterarte de los eventos, el sorteo y la Gran Peña."),
+      q("¿Cómo juntan la plata para viajar?",
+        ["Con eventos, sorteos y actividades", "Ganando la lotería", "No necesitan plata"], 0,
+        "Se financian con eventos y actividades que organizan los estudiantes, como el sorteo y la Gran Peña."),
+      q("¿Cuándo es la Gran Peña de CEVET?",
+        ["Viernes 11 de diciembre, 22:30 hs", "Mañana a la mañana", "En marzo"], 0,
+        "La Gran Peña es el viernes 11 de diciembre a las 22:30 en la UTN-FRT, Bernardino Rivadavia 1050. Entradas por DM a @cevet_2027.")
     ],
 
     Sistemas: [
-      {
-        pregunta: "¿Cuántos bits tiene un byte?",
-        opciones: ["2", "8", "10", "100"],
-        correcta: 1,
-        explicacion: "Un byte son 8 bits. Con 8 ceros y unos se pueden formar 256 combinaciones distintas."
-      },
-      {
-        pregunta: "¿Qué dígitos usa el sistema binario?",
-        opciones: ["Del 0 al 9", "Solo 0 y 1", "Solo 1 y 2", "Letras de la A a la F"],
-        correcta: 1,
-        explicacion: "Binario usa solo 0 y 1. Todo lo que guarda una computadora, fotos, música o tu nombre, termina siendo ceros y unos."
-      },
-      {
-        pregunta: "¿Qué significa CPU?",
-        opciones: ["Computadora Personal Usada", "Unidad Central de Procesamiento", "Cable Para USB", "Centro de Programas Útiles"],
-        correcta: 1,
-        explicacion: "La CPU (Central Processing Unit) es el «cerebro» que ejecuta las instrucciones de los programas."
-      },
-      {
-        pregunta: "¿Qué pasa con lo que está en la memoria RAM cuando apagás la compu?",
-        opciones: ["Se guarda para siempre", "Se borra", "Se manda por mail", "Se imprime"],
-        correcta: 1,
-        explicacion: "La RAM es memoria de trabajo: es rapidísima pero se borra al apagar. Lo que querés conservar va al disco."
-      },
-      {
-        pregunta: "¿Por dónde viajan los datos en la fibra óptica?",
-        opciones: ["Por pulsos de luz", "Por agua", "Por aire comprimido", "Por ondas de sonido"],
-        correcta: 0,
-        explicacion: "La fibra óptica lleva la información como pulsos de luz dentro de un hilo de vidrio finísimo. Por eso es tan rápida."
-      },
-      {
-        pregunta: "En programación, ¿qué es un «bug»?",
-        opciones: ["Un error en el programa", "Un tipo de teclado", "Un virus que solo ataca celulares", "Un programa terminado"],
-        correcta: 0,
-        explicacion: "Un bug es un error. Se cuenta que en 1947 encontraron una polilla real trabada en una computadora y la pegaron en la bitácora."
-      },
-      {
-        pregunta: "¿Cuál de estos es un lenguaje de programación?",
-        opciones: ["HDMI", "Python", "Wi-Fi", "JPEG"],
-        correcta: 1,
-        explicacion: "Python es uno de los lenguajes más usados, por ejemplo en ciencia de datos e IA. HDMI y Wi-Fi son conexiones; JPEG es un formato de imagen."
-      },
-      {
-        pregunta: "¿Qué significan las letras «www» de las páginas web?",
-        opciones: ["World Wide Web", "Wireless Web Window", "Web With Wifi", "World Wireless Wave"],
-        correcta: 0,
-        explicacion: "World Wide Web: la «telaraña mundial» de páginas conectadas, inventada por Tim Berners-Lee en 1989."
-      }
+      q("¿Qué dígitos usa el sistema binario?",
+        ["Solo 0 y 1", "Del 0 al 9", "Solo letras"], 0,
+        "Binario usa solo 0 y 1. Todo lo que guarda una computadora, fotos, música o tu nombre, termina siendo ceros y unos."),
+      q("¿Cuántos bits tiene un byte?",
+        ["8", "2", "100"], 0,
+        "Un byte son 8 bits. Con 8 ceros y unos se forman 256 combinaciones distintas."),
+      q("¿Qué es más grande?",
+        ["Un gigabyte", "Un kilobyte", "Un byte"], 0,
+        "Un gigabyte son unos mil megabytes, y un megabyte unos mil kilobytes. El byte es la unidad más chica de las tres."),
+      q("¿Cuál es el «cerebro» de la computadora?",
+        ["El procesador (CPU)", "El mouse", "Los parlantes"], 0,
+        "La CPU ejecuta las instrucciones de los programas: es la que «piensa»."),
+      q("¿Qué pasa con lo que está en la memoria RAM cuando apagás la compu?",
+        ["Se borra", "Se guarda para siempre", "Se imprime"], 0,
+        "La RAM es memoria de trabajo: rapidísima pero se borra al apagar. Lo que querés conservar va al disco."),
+      q("¿Cuál de estos es un lenguaje de programación?",
+        ["Python", "HDMI", "JPEG"], 0,
+        "Python es uno de los lenguajes más usados, por ejemplo en ciencia de datos e IA. HDMI es un cable y JPEG un formato de imagen."),
+      q("En programación, un «bug» es…",
+        ["Un error en el programa", "Un teclado nuevo", "Un programa terminado"], 0,
+        "Un bug es un error. Se cuenta que en 1947 encontraron una polilla real trabada en una computadora."),
+      q("¿Cuál de estos es un sistema operativo?",
+        ["Windows", "Google Chrome", "WhatsApp"], 0,
+        "Windows (como Linux, macOS o Android) es el sistema operativo que maneja la compu. Chrome y WhatsApp son aplicaciones."),
+      q("¿Cuál de estas cosas es un periférico de entrada?",
+        ["El teclado", "La pantalla", "Los parlantes"], 0,
+        "Con el teclado le das información a la compu (entrada). Pantalla y parlantes muestran o hacen sonar cosas (salida)."),
+      q("¿Qué atajo de teclado copia en Windows?",
+        ["Ctrl + C", "Ctrl + Z", "Alt + F4"], 0,
+        "Ctrl + C copia y Ctrl + V pega. Ctrl + Z deshace y Alt + F4 cierra la ventana."),
+      q("Un pendrive sirve para…",
+        ["Guardar y llevar archivos", "Cocinar", "Hacer llamadas"], 0,
+        "Es una memoria USB: guarda archivos y los llevás de una compu a otra."),
+      q("Un «algoritmo» es…",
+        ["Una lista de pasos para resolver algo", "Un tipo de pantalla", "Una marca de celular"], 0,
+        "Un algoritmo es una receta: pasos ordenados para resolver un problema. Los programas son algoritmos escritos para la compu.")
+    ],
+
+    "Internet y redes": [
+      q("¿Para qué sirve el wifi?",
+        ["Para conectarse a internet sin cables", "Para cargar la batería", "Para enfriar la compu"], 0,
+        "El wifi conecta tus dispositivos a la red por ondas de radio, sin cables."),
+      q("¿Qué significan las letras «www» de las páginas web?",
+        ["World Wide Web", "Wifi Web Window", "Web Web Web"], 0,
+        "World Wide Web: la «telaraña mundial» de páginas conectadas, inventada por Tim Berners-Lee en 1989."),
+      q("¿Cuál de estos es un navegador web?",
+        ["Google Chrome", "Word", "Calculadora"], 0,
+        "Chrome, Firefox o Edge son navegadores: los programas con los que abrís páginas web."),
+      q("¿Por dónde viajan los datos en la fibra óptica?",
+        ["Como pulsos de luz", "Por agua", "Como sonido"], 0,
+        "La fibra lleva la información como luz dentro de un hilo de vidrio finísimo. Por eso es tan rápida."),
+      q("¿Qué aparato de tu casa reparte internet por wifi?",
+        ["El router", "La heladera", "El microondas"], 0,
+        "El router recibe internet y lo reparte a tus dispositivos por cable o por wifi."),
+      q("En una dirección de mail, ¿qué símbolo nunca falta?",
+        ["@ (arroba)", "# (numeral)", "% (porcentaje)"], 0,
+        "Todo mail tiene una arroba: nombre@dominio, por ejemplo usuario@gmail.com."),
+      q("¿Qué es un «link» o enlace?",
+        ["Algo que tocás para ir a otra página", "Un cable roto", "Un tipo de virus"], 0,
+        "Un link te lleva a otra página o archivo al hacerle clic. Son los que unen la web."),
+      q("¿Qué es «la nube» en informática?",
+        ["Guardar archivos en computadoras por internet", "Una nube de lluvia", "Un programa para dibujar"], 0,
+        "«La nube» son servidores en centros de datos: guardás tus fotos ahí y las ves desde cualquier dispositivo."),
+      q("¿Qué es un buscador?",
+        ["Una página para encontrar información, como Google", "Un detector de metales", "Un tipo de cable"], 0,
+        "Google o Bing buscan entre millones de páginas y te muestran las que tienen lo que pediste."),
+      q("¿Qué es un centro de datos (data center)?",
+        ["Un edificio lleno de servidores", "Una biblioteca de papel", "Un estadio"], 0,
+        "Ahí viven las páginas, la nube y los servicios de internet. En Frankfurt, CEVET recorrió Data Centre World."),
+      q("Si internet anda lento cuando muchos miran videos a la vez, es porque…",
+        ["Comparten el mismo ancho de banda", "La pantalla está sucia", "Es de noche"], 0,
+        "El ancho de banda es como un caño: si mucha gente lo usa al mismo tiempo, a cada uno le toca menos."),
+      q("¿Qué es un emoji?",
+        ["Un dibujito que se manda como texto 😀", "Un virus", "Un tipo de cable"], 0,
+        "Los emojis son caracteres de texto, como las letras. Probalo en «Tu nombre en binario»: un emoji ocupa 4 bytes.")
+    ],
+
+    "Celulares y apps": [
+      q("¿Qué es una «app»?",
+        ["Un programa para el celular", "Una pieza del cargador", "Un tipo de pantalla"], 0,
+        "App viene de «aplicación»: un programa que instalás en el celular, como WhatsApp o un juego."),
+      q("¿Cuál es el sistema operativo de los iPhone?",
+        ["iOS", "Android", "Windows"], 0,
+        "Los iPhone usan iOS, de Apple. La mayoría de los otros celulares usan Android, de Google."),
+      q("¿De qué empresa es Android?",
+        ["Google", "Apple", "Nintendo"], 0,
+        "Android es de Google y es el sistema operativo más usado en celulares del mundo."),
+      q("¿De dónde conviene bajar las apps?",
+        ["De la tienda oficial (Play Store o App Store)", "De cualquier link que te manden", "De un mail desconocido"], 0,
+        "Las tiendas oficiales revisan las apps. Bajarlas de links raros puede meterte un virus."),
+      q("¿Qué hace el GPS del celular?",
+        ["Te dice dónde estás", "Te carga la batería", "Saca fotos"], 0,
+        "El GPS recibe señales de satélites y calcula tu ubicación. Lo usan los mapas y las apps de viajes."),
+      q("¿Cuál de estas es una app de mensajería?",
+        ["WhatsApp", "Calculadora", "Linterna"], 0,
+        "WhatsApp, Telegram o Messenger sirven para mandar mensajes, audios y fotos."),
+      q("Para que te dure más la batería, conviene…",
+        ["Bajar el brillo de la pantalla", "Dejar todo abierto", "Subir el brillo al máximo"], 0,
+        "La pantalla es de lo que más batería gasta. Bajarle el brillo ayuda mucho."),
+      q("¿Qué es una «captura de pantalla»?",
+        ["Una foto de lo que se ve en la pantalla", "Romper la pantalla", "Apagar el celular"], 0,
+        "Guarda como imagen exactamente lo que estás viendo en ese momento."),
+      q("¿Qué significa el modo avión?",
+        ["Apaga las conexiones inalámbricas del celular", "Hace volar el celular", "Sube el volumen"], 0,
+        "Corta la señal del celular y las conexiones inalámbricas. Después podés volver a prender el wifi o el bluetooth si querés."),
+      q("¿Para qué sirve el bluetooth?",
+        ["Conectar auriculares o parlantes sin cable", "Cargar el celular", "Sacar fotos"], 0,
+        "El bluetooth conecta dispositivos cercanos por radio, como auriculares, parlantes o un reloj."),
+      q("¿Qué es una actualización de una app?",
+        ["Una versión nueva que arregla errores o suma cosas", "Un virus", "Borrar la app"], 0,
+        "Las actualizaciones corrigen errores y agujeros de seguridad. Conviene tenerlas al día."),
+      q("¿Qué es un código QR?",
+        ["Un cuadradito que el celular lee con la cámara", "Un tipo de batería", "Una contraseña"], 0,
+        "El QR guarda información, como un link: lo apuntás con la cámara y te lleva a la página.")
+    ],
+
+    Videojuegos: [
+      q("¿Cómo se llama el personaje bigotudo de Nintendo que salta sobre hongos?",
+        ["Mario", "Sonic", "Pikachu"], 0,
+        "Mario es el plomero de Nintendo, protagonista de Super Mario Bros. desde 1985."),
+      q("¿De qué color es Sonic, el erizo de SEGA?",
+        ["Azul", "Verde", "Rojo"], 0,
+        "Sonic es un erizo azul famoso por ser rapidísimo."),
+      q("¿De qué empresa es la consola PlayStation?",
+        ["Sony", "Nintendo", "Microsoft"], 0,
+        "PlayStation es de Sony. Xbox es de Microsoft y Switch es de Nintendo."),
+      q("¿De qué empresa es la consola Xbox?",
+        ["Microsoft", "Sony", "SEGA"], 0,
+        "Xbox es de Microsoft, la misma empresa de Windows."),
+      q("En Minecraft, el mundo está hecho de…",
+        ["Bloques", "Esferas", "Agua solamente"], 0,
+        "Todo en Minecraft son cubos: los rompés y los ponés para construir lo que quieras."),
+      q("En Tetris, ¿qué pasa cuando completás una fila?",
+        ["Desaparece", "Se duplica", "Se termina el juego"], 0,
+        "Al completar una línea horizontal, se borra y sumás puntos. Tetris es de 1984."),
+      q("¿Qué es un «NPC» en un videojuego?",
+        ["Un personaje que maneja la computadora", "Un jugador profesional", "Un control"], 0,
+        "NPC (non-player character) es un personaje que no maneja ningún jugador, como el vendedor de una tienda."),
+      q("¿Qué es un «bug» en un videojuego?",
+        ["Un error del juego", "Un premio secreto", "Un nivel nuevo"], 0,
+        "Un bug es un error de programación: personajes que atraviesan paredes, cosas que flotan…"),
+      q("¿Qué pieza de la compu dibuja los gráficos de los juegos?",
+        ["La placa de video (GPU)", "El mouse", "La fuente"], 0,
+        "La GPU hace miles de cuentas en paralelo para dibujar cada cuadro. ¡Y hoy también se usa para entrenar IA!"),
+      q("Los «eSports» son…",
+        ["Competencias de videojuegos", "Deportes en el agua", "Ejercicios de matemática"], 0,
+        "Los deportes electrónicos son torneos de videojuegos, con equipos, público y premios."),
+      q("¿Qué personaje amarillo de Pokémon tira rayos?",
+        ["Pikachu", "Mario", "Kirby"], 0,
+        "Pikachu es un Pokémon de tipo eléctrico, el más famoso de la saga."),
+      q("Para hacer un videojuego hace falta…",
+        ["Programar", "Solo dibujar en papel", "Nada, se hacen solos"], 0,
+        "Un videojuego es un programa: alguien escribe el código que mueve todo, además del arte, la música y el diseño.")
+    ],
+
+    Ciberseguridad: [
+      q("¿Cuál de estas es una contraseña segura?",
+        ["T4c0-Luna!Rojo92", "123456", "contraseña"], 0,
+        "Una contraseña segura es larga y mezcla letras, números y símbolos. «123456» es de las más usadas del mundo."),
+      q("¿Con quién podés compartir tu contraseña?",
+        ["Con nadie", "Con cualquiera que te la pida", "Con un desconocido en internet"], 0,
+        "Tu contraseña es solo tuya. Ningún banco ni red social te la va a pedir por mensaje."),
+      q("Te llega un mensaje: «¡Ganaste un celular! Tocá este link». ¿Qué hacés?",
+        ["No toco el link: puede ser una estafa", "Toco ya", "Mando mis datos"], 0,
+        "Eso se llama phishing: te engañan con un premio para robarte datos. Si suena demasiado bueno, desconfiá."),
+      q("¿Qué es un virus informático?",
+        ["Un programa que daña o espía tu compu", "Una gripe de la compu por el frío", "Un antivirus"], 0,
+        "Es software malicioso: puede borrar archivos, robar datos o espiar. Se evita con cuidado y un antivirus."),
+      q("¿Qué es la verificación en dos pasos?",
+        ["Pedir un código extra además de la contraseña", "Escribir la contraseña dos veces", "Tener dos celulares"], 0,
+        "Aunque alguien sepa tu contraseña, sin el código de tu celular no entra. Activala en tus cuentas."),
+      q("¿Conviene usar la misma contraseña para todo?",
+        ["No: si roban una, entran a todas", "Sí, es más cómodo", "Sí, si es corta"], 0,
+        "Si una página filtra tu contraseña y es la misma en todos lados, quedan expuestas todas tus cuentas."),
+      q("En el navegador, el candado al lado de la dirección (https) indica que…",
+        ["La conexión con esa página va cifrada", "La página es gratis", "La página está cerrada"], 0,
+        "El candado significa que los datos viajan cifrados. Ojo: no garantiza que la página sea confiable."),
+      q("¿Qué es un «hacker ético»?",
+        ["Alguien que busca fallas para arreglarlas, con permiso", "Alguien que roba cuentas", "Un tipo de virus"], 0,
+        "Los hackers éticos prueban la seguridad de sistemas con autorización para encontrar fallas antes que los delincuentes."),
+      q("Antes de subir una foto a redes, conviene fijarse que no muestre…",
+        ["Tu dirección o datos personales", "El cielo", "Tu mascota"], 0,
+        "Datos como tu dirección, tu documento o tu colegio pueden usarlos desconocidos. Cuidá lo que publicás."),
+      q("Si encontrás un pendrive tirado en la calle, ¿lo conectás a tu compu?",
+        ["No, puede tener un virus", "Sí, enseguida", "Sí, para ver qué tiene"], 0,
+        "Un pendrive desconocido puede traer software malicioso que se instala solo al conectarlo."),
+      q("¿Para qué sirve un antivirus?",
+        ["Para detectar y frenar programas maliciosos", "Para hacer la compu más linda", "Para tener wifi"], 0,
+        "El antivirus revisa archivos y programas para encontrar y bloquear malware."),
+      q("¿Qué es una copia de seguridad (backup)?",
+        ["Una copia de tus archivos por si se pierden", "Un virus", "Una contraseña larga"], 0,
+        "Si se rompe la compu o te roban el celular, con un backup recuperás tus fotos y archivos.")
     ]
   };
 

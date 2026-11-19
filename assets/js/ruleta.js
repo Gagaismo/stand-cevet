@@ -41,6 +41,24 @@
     return Math.floor(a / (360 / n)) % n;
   }
 
+  /* Devuelve una copia de la pregunta con las opciones en orden aleatorio y
+     `correcta` apuntando a la misma respuesta; así la correcta no cae casi
+     siempre en la misma letra. No modifica la pregunta original. */
+  function mezclarOpciones(p, rng) {
+    var aleatorio = rng || Math.random;
+    var orden = p.opciones.map(function (_, i) { return i; });
+    for (var i = orden.length - 1; i > 0; i--) {
+      var j = Math.floor(aleatorio() * (i + 1));
+      var tmp = orden[i]; orden[i] = orden[j]; orden[j] = tmp;
+    }
+    return {
+      pregunta: p.pregunta,
+      opciones: orden.map(function (k) { return p.opciones[k]; }),
+      correcta: orden.indexOf(p.correcta),
+      explicacion: p.explicacion
+    };
+  }
+
   function rngCripto() {
     if (raiz.crypto && raiz.crypto.getRandomValues) {
       var u = new Uint32Array(1);
@@ -50,7 +68,7 @@
     return Math.random();
   }
 
-  var api = { crearSelector: crearSelector, temaPorAngulo: temaPorAngulo, rngCripto: rngCripto };
+  var api = { crearSelector: crearSelector, temaPorAngulo: temaPorAngulo, mezclarOpciones: mezclarOpciones, rngCripto: rngCripto };
   raiz.Ruleta = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 
@@ -59,7 +77,19 @@
 
   var SVG = "http://www.w3.org/2000/svg";
   var LETRAS = ["A", "B", "C", "D"];
-  var ICONOS = { IA: "🤖", "Cuántica": "⚛️", Viaje: "✈️", Sistemas: "💻" };
+  var ICONOS = {
+    IA: "🤖", "Cuántica": "⚛️", Viaje: "✈️", Sistemas: "💻",
+    "Internet y redes": "🌐", "Celulares y apps": "📱", Videojuegos: "🎮", Ciberseguridad: "🔒"
+  };
+  /* Cómo se escribe cada tema en la rueda (una o dos líneas, a lo largo del radio). */
+  var RENGLONES = {
+    "Internet y redes": ["Internet", "y redes"],
+    "Celulares y apps": ["Celulares", "y apps"],
+    Videojuegos: ["Video-", "juegos"],
+    Ciberseguridad: ["Ciber-", "seguridad"]
+  };
+  var COLORES = ["amarillo", "tinta", "blanco", "gris"];
+  var TEXTO_SOBRE = { amarillo: "sobre-claro", tinta: "sobre-tinta", blanco: "sobre-claro", gris: "sobre-claro" };
 
   function iniciar() {
     var datos = raiz.PREGUNTAS;
@@ -91,28 +121,29 @@
         var sector = document.createElementNS(SVG, "path");
         sector.setAttribute("d", "M200,200 L" + p0[0] + "," + p0[1] +
           " A190,190 0 " + (paso > 180 ? 1 : 0) + ",1 " + p1[0] + "," + p1[1] + " Z");
-        sector.setAttribute("class", "sector sector-" + (i % 2 === 0 ? "amarillo" : "tinta"));
+        var color = COLORES[i % COLORES.length];
+        sector.setAttribute("class", "sector sector-" + color);
         g.appendChild(sector);
 
+        /* El texto va a lo largo del radio, de adentro hacia afuera, para que
+           entren los ocho temas con letra grande. */
         var medio = a0 + paso / 2;
-        var pt = polar(118, medio);
+        var pt = polar(112, medio);
         var texto = document.createElementNS(SVG, "text");
         texto.setAttribute("x", pt[0]);
         texto.setAttribute("y", pt[1]);
-        texto.setAttribute("transform", "rotate(" + medio + " " + pt[0] + " " + pt[1] + ")");
-        texto.setAttribute("class", "sector-texto " + (i % 2 === 0 ? "sobre-amarillo" : "sobre-tinta"));
+        texto.setAttribute("transform", "rotate(" + (medio - 90) + " " + pt[0] + " " + pt[1] + ")");
+        texto.setAttribute("class", "sector-texto " + TEXTO_SOBRE[color]);
         texto.setAttribute("text-anchor", "middle");
-        texto.setAttribute("dominant-baseline", "middle");
-        var icono = document.createElementNS(SVG, "tspan");
-        icono.setAttribute("x", pt[0]);
-        icono.setAttribute("dy", "-0.7em");
-        icono.textContent = ICONOS[tema] || "";
-        var nombre = document.createElementNS(SVG, "tspan");
-        nombre.setAttribute("x", pt[0]);
-        nombre.setAttribute("dy", "1.4em");
-        nombre.textContent = tema;
-        texto.appendChild(icono);
-        texto.appendChild(nombre);
+        texto.setAttribute("dominant-baseline", "central");
+        var renglones = RENGLONES[tema] || [tema];
+        renglones.forEach(function (r, k) {
+          var t = document.createElementNS(SVG, "tspan");
+          t.setAttribute("x", pt[0]);
+          t.setAttribute("dy", k === 0 ? (-(renglones.length - 1) * 0.55) + "em" : "1.1em");
+          t.textContent = r;
+          texto.appendChild(t);
+        });
         g.appendChild(texto);
       });
       var borde = document.createElementNS(SVG, "circle");
@@ -147,12 +178,25 @@
       giro.style.transition = instantaneo ? "none" : "transform 3s cubic-bezier(0.17, 0.67, 0.21, 1)";
       giro.style.transform = "rotate(" + rotacion + "deg)";
 
-      setTimeout(function () {
+      /* La pregunta aparece cuando la rueda termina de girar de verdad
+         (transitionend), así el puntero siempre coincide con el tema. El
+         temporizador es solo un respaldo por si el evento no llega. */
+      var listo = false;
+      var respaldo = null;
+      function terminar() {
+        if (listo) return;
+        listo = true;
+        clearTimeout(respaldo);
+        giro.removeEventListener("transitionend", alTerminar);
         girando = false;
         botonGirar.disabled = false;
         var tema = temas[temaPorAngulo(rotacion, n)];
-        mostrarPregunta(tema, selector.siguiente(tema));
-      }, instantaneo ? 0 : 3100);
+        mostrarPregunta(tema, mezclarOpciones(selector.siguiente(tema), rngCripto));
+      }
+      function alTerminar(e) { if (e.target === giro) terminar(); }
+      if (instantaneo) { terminar(); return; }
+      giro.addEventListener("transitionend", alTerminar);
+      respaldo = setTimeout(terminar, 6000);
     }
 
     function mostrarPregunta(tema, p) {

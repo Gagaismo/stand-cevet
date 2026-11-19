@@ -3,16 +3,23 @@ const assert = require("node:assert/strict");
 const { TEMAS, BANCO } = require("../assets/js/preguntas.js");
 const { crearSelector, temaPorAngulo } = require("../assets/js/ruleta.js");
 
-test("hay cuatro temas: IA, Cuántica, Viaje, Sistemas", () => {
-  assert.deepEqual(TEMAS, ["IA", "Cuántica", "Viaje", "Sistemas"]);
-  for (const t of TEMAS) assert.ok(BANCO[t].length >= 6, `pocas preguntas en ${t}`);
+test("hay ocho temas y al menos 12 preguntas por tema", () => {
+  assert.deepEqual(TEMAS, ["IA", "Cuántica", "Viaje", "Sistemas", "Internet y redes", "Celulares y apps", "Videojuegos", "Ciberseguridad"]);
+  assert.deepEqual(Object.keys(BANCO).sort(), [...TEMAS].sort());
+  for (const t of TEMAS) assert.ok(BANCO[t].length >= 12, `pocas preguntas en ${t}: ${BANCO[t].length}`);
+});
+
+test("no hay preguntas repetidas en todo el banco", () => {
+  const todas = TEMAS.flatMap((t) => BANCO[t].map((p) => p.pregunta.trim().toLowerCase()));
+  assert.equal(new Set(todas).size, todas.length);
 });
 
 test("cada pregunta tiene una sola respuesta correcta en rango y explicación", () => {
   for (const t of TEMAS) {
     for (const p of BANCO[t]) {
       assert.ok(typeof p.pregunta === "string" && p.pregunta.trim(), "pregunta vacía");
-      assert.ok(Array.isArray(p.opciones) && p.opciones.length >= 3 && p.opciones.length <= 4, p.pregunta);
+      assert.ok(Array.isArray(p.opciones) && p.opciones.length === 3, "no tiene 3 opciones: " + p.pregunta);
+      for (const o of p.opciones) assert.ok(typeof o === "string" && o.trim(), "opción vacía: " + p.pregunta);
       assert.ok(Number.isInteger(p.correcta), p.pregunta);
       assert.ok(p.correcta >= 0 && p.correcta < p.opciones.length, p.pregunta);
       assert.equal(new Set(p.opciones).size, p.opciones.length, "opciones repetidas: " + p.pregunta);
@@ -58,4 +65,35 @@ test("temaPorAngulo mapea la rotación (horaria, en grados) al sector bajo el pu
   assert.equal(temaPorAngulo(225, 4), 1);
   assert.equal(temaPorAngulo(315, 4), 0);
   assert.equal(temaPorAngulo(360 * 5 + 45, 4), 3);
+});
+
+test("temaPorAngulo con ocho sectores de 45°", () => {
+  assert.equal(temaPorAngulo(0, 8), 0);
+  assert.equal(temaPorAngulo(-30, 8), 0);
+  assert.equal(temaPorAngulo(-50, 8), 1);
+  assert.equal(temaPorAngulo(30, 8), 7);
+  assert.equal(temaPorAngulo(180 + 10, 8), 3);
+  assert.equal(temaPorAngulo(360 * 5 - 100, 8), 2);
+});
+
+test("mezclarOpciones conserva las opciones y mueve la correcta con su texto", () => {
+  const { mezclarOpciones } = require("../assets/js/ruleta.js");
+  const p = { pregunta: "¿Cuántos bits tiene un byte?", opciones: ["4", "8", "16", "32"], correcta: 1, explicacion: "Un byte son 8 bits." };
+  const seq = [0.1, 0.9, 0.5, 0.3, 0.7, 0.2];
+  let k = 0;
+  const m = mezclarOpciones(p, () => seq[k++ % seq.length]);
+  assert.deepEqual([...m.opciones].sort(), [...p.opciones].sort());
+  assert.equal(m.opciones[m.correcta], "8");
+  assert.equal(m.pregunta, p.pregunta);
+  assert.equal(m.explicacion, p.explicacion);
+  assert.deepEqual(p.opciones, ["4", "8", "16", "32"], "no modifica la pregunta original");
+  assert.equal(p.correcta, 1);
+});
+
+test("mezclarOpciones reparte la respuesta correcta entre las tres letras", () => {
+  const { mezclarOpciones } = require("../assets/js/ruleta.js");
+  const p = { pregunta: "x", opciones: ["a", "b", "c"], correcta: 1, explicacion: "y" };
+  const cuentas = [0, 0, 0];
+  for (let i = 0; i < 3000; i++) cuentas[mezclarOpciones(p, Math.random).correcta]++;
+  for (const c of cuentas) assert.ok(c > 800 && c < 1200, "reparto sesgado: " + cuentas.join(","));
 });

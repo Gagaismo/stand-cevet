@@ -70,6 +70,17 @@
     else if (e.key === "f" || e.key === "F") toggleFullscreen();
   });
 
+  // Fondo de cada foto: la misma imagen, desenfocada, llenando la pantalla.
+  slides.forEach(function (s) {
+    var img = s.classList.contains("photo") && s.querySelector("img");
+    if (!img) return;
+    var bg = document.createElement("div");
+    bg.className = "bg";
+    bg.setAttribute("aria-hidden", "true");
+    bg.style.backgroundImage = 'url("' + img.src + '")';
+    s.insertBefore(bg, s.firstChild);
+  });
+
   if (!slides.length) return;
   slides[0].classList.add("active");
   schedule();
