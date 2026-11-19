@@ -6,6 +6,12 @@
 <title>Stand CEVET · ISI CONECTA</title>
 <meta name="description" content="Stand de CEVET, Centro de Viajes Tecnológicos UTN FRT: guía, pantalla en loop y juegos.">
 <link rel="stylesheet" href="assets/css/site.css">
+<style>
+  /* 4 tarjetas: una fila en pantalla grande, 2x2 en el medio, una columna en el celu. */
+  .hub { grid-template-columns: 1fr; }
+  @media (min-width: 34rem) { .hub { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 64rem) { .hub { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
@@ -42,12 +48,6 @@
       <span class="label">Juego · Notebook derecha</span>
       <h2>Ruleta de temas</h2>
       <p>8 temas: IA, cuántica, viaje, internet, videojuegos y más. Gira, leemos la pregunta y si acierta, caramelo.</p>
-      <span class="go">Jugar →</span>
-    </a>
-    <a class="card" href="cuantica.html">
-      <span class="label">Juego · Notebook derecha</span>
-      <h2>Moneda cuántica</h2>
-      <p>Un qubit simulado: aplicá Hadamard, medí y mirá cómo aparece el 50/50.</p>
       <span class="go">Jugar →</span>
     </a>
     <a class="card" href="binario.html">

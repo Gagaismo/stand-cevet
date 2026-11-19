@@ -1,6 +1,6 @@
 @import "../fonts/fonts.css";
 
-/* Estilos de los juegos del stand (ruleta, moneda cuántica, binario).
+/* Estilos de los juegos del stand (ruleta, binario).
    Pantallas para presentar en una notebook 15,6" 1920x1080, legibles a 2 m.
    Identidad: blanco, tinta #0B0B0C, amarillo UTN #FFD700 solo como relleno. */
 
@@ -226,93 +226,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 @keyframes latido { 50% { transform: scale(1.08); } }
 
-/* ---------- Moneda cuántica ---------- */
-.cuantica {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 2rem;
-}
-.panel {
-  border: 3px solid var(--tinta);
-  border-radius: 22px;
-  padding: 1.3rem 1.5rem;
-}
-.estado {
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: 2.6rem;
-  margin: 0;
-}
-.estado-desc { font-size: 1.2rem; margin: 0.3rem 0 1rem; }
-.probs { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
-.prob { display: grid; grid-template-columns: 4.5rem 1fr 3.5rem; align-items: center; gap: 0.6rem; font-family: var(--mono); font-size: 1rem; }
-.prob-barra { height: 1.1rem; border: 2px solid var(--tinta); border-radius: 999px; overflow: hidden; }
-.prob-barra span { display: block; height: 100%; width: var(--p, 0%); background: var(--tinta); transition: width 0.3s; }
-.botones { display: flex; flex-wrap: wrap; gap: 0.9rem; margin: 0.4rem 0 1rem; }
-.circuito-caja { font-family: var(--mono); font-size: 0.95rem; }
-.circuito-caja code { font-family: var(--mono); font-weight: 600; font-size: 1.1rem; }
-.nota { font-size: 0.95rem; color: var(--gris); margin: 0.3rem 0 0; }
-
-.resultado-cuantico {
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: 2.2rem;
-  min-height: 3rem;
-  margin: 0 0 0.6rem;
-}
-.resultado-cuantico.pop { animation: latido 0.35s ease-out; }
-.histograma {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  height: 36vh;
-  align-items: end;
-  padding: 0 1rem;
-  border-bottom: 3px solid var(--tinta);
-}
-.columna { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
-.columna-num { font-family: var(--mono); font-weight: 600; font-size: 1.2rem; }
-.columna-barra {
-  width: 70%;
-  height: var(--h, 0%);
-  min-height: 2px;
-  background: var(--amarillo);
-  border: 3px solid var(--tinta);
-  border-bottom: 0;
-  border-radius: 10px 10px 0 0;
-  transition: height 0.35s ease-out;
-}
-.ejes { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 0.4rem 1rem 0; text-align: center; font-family: var(--display); font-weight: 800; font-size: 2rem; }
-.total { font-family: var(--mono); font-size: 0.95rem; color: var(--gris); text-align: center; margin: 0.4rem 0 0; }
-
-.truco {
-  margin-top: 1.2rem;
-  background: var(--amarillo);
-  border: 3px solid var(--tinta);
-  border-radius: 16px;
-  padding: 0.9rem 1.1rem;
-  font-size: 1.1rem;
-}
-.truco strong { font-family: var(--display); }
-
-.explica { margin-top: 2rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; }
-.explica h2 { font-family: var(--display); font-weight: 700; font-size: 1.15rem; margin: 0 0 0.4rem; }
-.explica p { font-size: 1.05rem; margin: 0; }
-
-.fotos { margin-top: 2rem; }
-.tira { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 0; }
-.tira figure { margin: 0; }
-.tira img {
-  display: block;
-  width: 100%;
-  height: 34vh;
-  object-fit: cover;
-  border: 3px solid var(--tinta);
-  border-radius: 14px;
-  background: #f2f2f2;
-}
-.tira figcaption { font-family: var(--mono); font-size: 0.8rem; margin-top: 0.4rem; }
-
 /* ---------- Binario ---------- */
 .binario-entrada { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.4rem; }
 .binario-entrada label { font-family: var(--display); font-weight: 700; font-size: 1.5rem; }
@@ -379,8 +292,7 @@ td { padding: 0.45rem 0.7rem; border-bottom: 1px solid var(--linea); vertical-al
 /* ---------- Pantallas chicas ---------- */
 @media (max-width: 900px) {
   html { font-size: 16px; }
-  .ruleta, .cuantica, .explica { grid-template-columns: 1fr; }
-  .tira { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ruleta { grid-template-columns: 1fr; }
   .tarjeta { min-height: 0; }
 }
 
