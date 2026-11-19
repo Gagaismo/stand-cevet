@@ -1,0 +1,9 @@
+{
+  "name": "stand-cevet",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio del stand CEVET en ISI CONECTA",
+  "scripts": {
+    "test": "node --test tests/"
+  }
+}

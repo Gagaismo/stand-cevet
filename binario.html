@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tu nombre en binario · CEVET</title>
+  <link rel="stylesheet" href="assets/css/juegos.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="inicio" href="index.html">← Inicio</a>
+    <h1>Tu nombre en binario</h1>
+    <span class="marca">0 · 1 · UTF-8</span>
+  </header>
+  <main>
+    <div class="binario-entrada">
+      <label for="nombre">Escribí tu nombre 👇</label>
+      <input id="nombre" type="text" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Ej.: Ñandú">
+      <p id="resumen" class="resumen" aria-live="polite"></p>
+    </div>
+    <div class="tabla-caja">
+      <table>
+        <thead>
+          <tr><th scope="col">Letra</th><th scope="col">Código Unicode</th><th scope="col">Bytes UTF-8</th><th scope="col">En bits</th></tr>
+        </thead>
+        <tbody id="tabla-cuerpo"></tbody>
+      </table>
+    </div>
+    <div class="bits-caja">
+      <p class="etiqueta">Así lo guarda la compu</p>
+      <p id="bits" class="bits"></p>
+    </div>
+    <p class="binario-nota">Cada letra es un número (su código Unicode). La compu lo guarda en bytes con UTF-8, y cada byte son 8 bits: ceros y unos. Las letras comunes ocupan 1 byte; la ñ y las tildes, 2; un emoji, 4.</p>
+  </main>
+  <script src="assets/js/binario.js"></script>
+</body>
+</html>

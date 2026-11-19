@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ruleta tech · CEVET</title>
+  <link rel="stylesheet" href="assets/css/juegos.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="inicio" href="index.html">← Inicio</a>
+    <h1>Ruleta tech</h1>
+    <span class="marca">CEVET · UTN FRT</span>
+  </header>
+  <main class="ruleta">
+    <section class="rueda-caja" aria-label="Ruleta de temas">
+      <div class="rueda-marco">
+        <div class="puntero" aria-hidden="true"></div>
+        <svg id="rueda" viewBox="0 0 400 400" role="img" aria-label="Ruleta con cuatro temas: IA, Cuántica, Viaje y Sistemas"></svg>
+      </div>
+      <button id="girar" class="boton principal" type="button">Girar la ruleta</button>
+      <p class="ayuda">Espacio o Enter también giran</p>
+    </section>
+    <section id="tarjeta" class="tarjeta" aria-live="polite">
+      <p class="etiqueta">IA · Cuántica · Viaje · Sistemas</p>
+      <p class="tarjeta-espera">Girá la ruleta y respondé.</p>
+      <p class="tarjeta-sub">Si acertás, te llevás un caramelo 🍬</p>
+    </section>
+  </main>
+  <script src="assets/js/preguntas.js"></script>
+  <script src="assets/js/ruleta.js"></script>
+</body>
+</html>
